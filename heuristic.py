@@ -1,8 +1,11 @@
 import random
-
+import numpy as np
 
 class AStarAlgorithm:
-    pass
+    def __init__(self, n):
+        self.n = n
+        self.board = [random.randint(0, n - 1) for _ in range(n)]
+
 
 
 class HillClimbingAlgorithm:
@@ -40,15 +43,28 @@ class HillClimbingAlgorithm:
         return best_move
 
     def solve_n_queens(self):
+        print("Step {} is: {}".format(0, self.board))
+        count = 1
         while True:
             move = self.get_best_move()
             if move is None:
-                break
-            col, row = move
-            self.move_queen(col, row)
-            self.heuristic = self.calculate_heuristic()
+                if self.heuristic == 0:
+                    break
+                else:
+                    new_board = [random.randint(0, self.n - 1) for _ in range(self.n)]
+                    while np.array_equal(np.array(new_board), np.array(self.board)):
+                        new_board = [random.randint(0, self.n - 1) for _ in range(self.n)]
+                    self.board = new_board
+            else:
+                col, row = move
+                self.move_queen(col, row)
+                self.heuristic = self.calculate_heuristic()
+                print("Step {} is: {}".format(count, self.board))
+                count+=1
+        return self.board
 
     def print_solution(self):
+
         for row in range(self.n):
             line = ['.'] * self.n
             line[self.board[row]] = 'Q'
@@ -58,5 +74,6 @@ class HillClimbingAlgorithm:
 
 if __name__ == '__main__':
     n_queens = HillClimbingAlgorithm(8)
-    n_queens.solve_n_queens()
-    n_queens.print_solution()
+    res = n_queens.solve_n_queens()
+    print(res)
+    # n_queens.print_solution()
