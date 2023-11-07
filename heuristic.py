@@ -1,12 +1,6 @@
 import random
 import numpy as np
 
-class AStarAlgorithm:
-    def __init__(self, n):
-        self.n = n
-        self.board = [random.randint(0, n - 1) for _ in range(n)]
-
-
 
 class HillClimbingAlgorithm:
     def __init__(self, n):
@@ -15,30 +9,47 @@ class HillClimbingAlgorithm:
         self.heuristic = self.calculate_heuristic()
 
     def calculate_heuristic(self):
-        heuristic = 0
+        attacking = 0
+        # lưu current state của cột, đường chéo trái, phải
+        dict1 = {}
+        dict2 = {}
+        dict3 = {}
         for i in range(self.n):
-            for j in range(i + 1, self.n):
-                if self.board[i] == self.board[j] or abs(self.board[i] - self.board[j]) == j - i:
-                    heuristic += 1
-        return heuristic
+            # quân hậu đang xét có vị trí cột đã tồn tại trong dict
+            if self.board[i] in dict1:
+                attacking += 1
+            else:
+                dict1.update({self.board[i]: True})
+            # quân hậu đang xét có vị trí đường chéo trái đã tồn tại trong dict
+            if self.board[i] - i in dict2:
+                attacking += 1
+            else:
+                dict2.update({self.board[i] - i: True})
+            # quân hậu đang xét có vị trí đường chéo phải đã tồn tại trong dict
+            if self.board[i] + i in dict3:
+                attacking += 1
+            else:
+                dict3.update({self.board[i] + i: True})
 
-    def move_queen(self, col, row):
-        self.board[col] = row
+        return attacking
+
+    def move_queen(self, row, col):
+        self.board[row] = col
 
     def get_best_move(self):
         best_move = None
         min_heuristic = self.heuristic
 
-        for col in range(self.n):
-            for row in range(self.n):
-                if self.board[col] != row:
-                    prev_row = self.board[col]
-                    self.move_queen(col, row)
+        for row in range(self.n):
+            for col in range(self.n):
+                if self.board[row] != col:
+                    prev_col = self.board[row]
+                    self.move_queen(row, col)
                     new_heuristic = self.calculate_heuristic()
                     if new_heuristic < min_heuristic:
                         min_heuristic = new_heuristic
-                        best_move = (col, row)
-                    self.move_queen(col, prev_row)
+                        best_move = (row, col)
+                    self.move_queen(row, prev_col)
 
         return best_move
 
@@ -51,16 +62,19 @@ class HillClimbingAlgorithm:
                 if self.heuristic == 0:
                     break
                 else:
+                    # flat problem
                     new_board = [random.randint(0, self.n - 1) for _ in range(self.n)]
                     while np.array_equal(np.array(new_board), np.array(self.board)):
                         new_board = [random.randint(0, self.n - 1) for _ in range(self.n)]
                     self.board = new_board
+                    self.heuristic = self.calculate_heuristic()
+                    print("Restart board: ", self.board)
             else:
                 col, row = move
                 self.move_queen(col, row)
                 self.heuristic = self.calculate_heuristic()
                 print("Step {} is: {}".format(count, self.board))
-                count+=1
+                count += 1
         return self.board
 
     def print_solution(self):
@@ -76,4 +90,4 @@ if __name__ == '__main__':
     n_queens = HillClimbingAlgorithm(8)
     res = n_queens.solve_n_queens()
     print(res)
-    # n_queens.print_solution()
+    n_queens.print_solution()

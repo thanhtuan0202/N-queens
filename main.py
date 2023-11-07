@@ -16,10 +16,13 @@ def is_valid(board):
     return True
 
 if __name__ == "__main__":
-    n = 4
+    # n = 4
+    # dfs = DFS()
+    # lst = dfs.solution(8)
+
     bfs = BFS()
-    lst = bfs.solution(5)
+    lst = bfs.solution(8)
     # for i in range(len(lst)):
     #     print(lst[i])
     print(lst)
-    print(is_valid(lst))
+    # print(is_valid(lst))

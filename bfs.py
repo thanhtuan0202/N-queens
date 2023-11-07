@@ -4,13 +4,6 @@ class BFS:
         self.exist_col: [int] = []
         self.diag1: [int] = []
         self.diag2: [int] = []
-
-    # def is_safe(self, board, row, col):
-    #     for i in range(row):
-    #         if board[i] == col or board[i] - i == col - row or board[i] + i == col + row:
-    #             return False
-    #     return True
-
     def bfs(self, res, n):
         queue = [[]]
         lst = [[]]
@@ -37,4 +30,4 @@ class BFS:
         res = []
         lst = []
         self.bfs(res, n)
-        return random.choice(res)
+        return res

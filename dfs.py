@@ -36,10 +36,13 @@ class DFS:
 
     def convert_solution(self, n):
         lst = []
-        ran = random.choice(self.res)
-        for i in range(n):
-            for j in range(n):
-                if ran[i][j] == 1:
-                    lst.append(j)
-                    break
+        # ran = random.choice(self.res)
+        for ran in self.res:
+            sub_lst = []
+            for i in range(n):
+                for j in range(n):
+                    if ran[i][j] == 1:
+                        sub_lst.append(j)
+                        break
+            lst.append(sub_lst)
         return lst
